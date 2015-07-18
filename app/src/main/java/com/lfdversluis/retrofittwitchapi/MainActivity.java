@@ -7,8 +7,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.lfdversluis.retrofittwitchapi.API.TwitchAPI;
-import com.lfdversluis.retrofittwitchapi.models.TwitchChannel;
-import com.lfdversluis.retrofittwitchapi.models.TwitchUser;
+import com.lfdversluis.retrofittwitchapi.Models.TwitchChannel;
+import com.lfdversluis.retrofittwitchapi.Models.TwitchChannelFollowers;
+import com.lfdversluis.retrofittwitchapi.Models.TwitchUser;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import retrofit.Callback;
 import retrofit.RequestInterceptor;
@@ -53,14 +57,14 @@ public class MainActivity extends Activity {
         api.getUserByName("cookieandegg", new Callback<TwitchUser>() {
             @Override
             public void success(TwitchUser user, Response response) {
-                Log.e(LOG_TAG, user.getName()+""); //
+                Log.e("getUserByName ex.", user.getName()+""); //
                 // Some items can be null if queried by getUserByName (not authenticated)!
-                Log.e(LOG_TAG, user.getNotifications()+""); //
+                Log.e("getUserByName ex.", user.getNotifications()+""); //
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Log.e(LOG_TAG, "FAILED: " + error.toString());
+                Log.e("getUserByName ex.", "FAILED: " + error.toString());
             }
         });
 
@@ -71,16 +75,61 @@ public class MainActivity extends Activity {
         api.getChannelByName("cookieandegg", new Callback<TwitchChannel>() {
             @Override
             public void success(TwitchChannel channel, Response response) {
-                Log.e(LOG_TAG, channel.getStatus());
+                Log.e("getChannelByName ex.", channel.getStatus());
 
                 // Some items can be null (not present) when you do an unauthenticated call:
                 // Differences in the returns can be observed at https://github.com/justintv/Twitch-API/blob/master/v3_resources/channels.md
-                Log.e(LOG_TAG, channel.getStreamKey()+"");
+                Log.e("getChannelByName ex.", channel.getStreamKey()+"");
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Log.e(LOG_TAG, "FAILED: " + error.toString());
+                Log.e("getChannelByName ex.", "FAILED: " + error.toString());
+            }
+        });
+
+        // update example
+
+        final JSONObject updateObject = new JSONObject();
+        JSONObject channelObject = new JSONObject();
+        try {
+            channelObject.put("status", "Awesome Test Title");
+            channelObject.put("game", "Counter-Strike: Global Offensive");
+            channelObject.put("delay", 0);
+            updateObject.put("channel", channelObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        /*
+        api.updateChannel("<OAuth token>", "cookieandegg", new TypedJSONString(channelObject.toString()), new Callback<TwitchChannel>() {
+            @Override
+            public void success(TwitchChannel channel, Response response) {
+                Log.e("Update channel ex.", "Success");
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e("Update channel ex.", "FAILED: " + error.toString());
+            }
+        }); */
+
+        /********************************************************************
+         * STREAM FOLLOWERS EXAMPLE
+         *******************************************************************/
+
+        api.getChannelFollowers("cookieandegg", 25, 0, "desc", new Callback<TwitchChannelFollowers>() {
+            @Override
+            public void success(TwitchChannelFollowers followers, Response response) {
+                Log.e("Channel followers ex.", followers.getTotal()+"");
+                for(TwitchChannelFollowers.Follower follower : followers.getFollows()){
+                    Log.e("Channel followers ex.", follower.getUser().getName());
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e("Channel followers ex.", error.toString());
             }
         });
     }

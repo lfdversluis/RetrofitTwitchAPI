@@ -1,4 +1,4 @@
-package com.lfdversluis.retrofittwitchapi.models;
+package com.lfdversluis.retrofittwitchapi.Models;
 
 
 import com.google.gson.annotations.Expose;
