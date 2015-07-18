@@ -1,5 +1,6 @@
 package com.lfdversluis.retrofittwitchapi.API;
 
+import com.lfdversluis.retrofittwitchapi.models.TwitchChannel;
 import com.lfdversluis.retrofittwitchapi.models.TwitchUser;
 
 import retrofit.Callback;
@@ -13,13 +14,26 @@ public interface TwitchAPI {
 
     @GET("/users/{user}")
     void getUserByName(
-            @Path("user") String user, Callback<TwitchUser> cb);
+            @Path("user") String user,
+            Callback<TwitchUser> cb
+    );
 
     @GET("/user")
     void getUserByOauthToken(
             @Query("oauth_token") String token,
-            Callback<TwitchUser> cb);
+            Callback<TwitchUser> cb
+    );
 
+    @GET("/channels/{channel}")
+    void getChannelByName(
+            @Path("channel") String channelName,
+            Callback<TwitchChannel> cb
+    );
 
+    @GET("/channel")
+    void getChannelByOauthToken(
+            @Query("oauth_token") String token,
+            Callback<TwitchChannel> cb
+    );
 
 }

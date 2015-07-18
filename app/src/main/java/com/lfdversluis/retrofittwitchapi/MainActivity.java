@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.lfdversluis.retrofittwitchapi.API.TwitchAPI;
+import com.lfdversluis.retrofittwitchapi.models.TwitchChannel;
 import com.lfdversluis.retrofittwitchapi.models.TwitchUser;
 
 import retrofit.Callback;
@@ -44,10 +45,37 @@ public class MainActivity extends Activity {
                 .build();
 
         TwitchAPI api = restAdapter.create(TwitchAPI.class);
+
+        /********************************************************************
+         * TWITCH USER EXAMPLE
+         *******************************************************************/
+
         api.getUserByName("cookieandegg", new Callback<TwitchUser>() {
             @Override
             public void success(TwitchUser user, Response response) {
-                Log.e(LOG_TAG, user.getNotifications()+""); // Can be null if queried by getUserByName (not authenticated)!
+                Log.e(LOG_TAG, user.getName()+""); //
+                // Some items can be null if queried by getUserByName (not authenticated)!
+                Log.e(LOG_TAG, user.getNotifications()+""); //
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e(LOG_TAG, "FAILED: " + error.toString());
+            }
+        });
+
+        /********************************************************************
+         * TWITCH CHANNEL EXAMPLE
+         *******************************************************************/
+
+        api.getChannelByName("cookieandegg", new Callback<TwitchChannel>() {
+            @Override
+            public void success(TwitchChannel channel, Response response) {
+                Log.e(LOG_TAG, channel.getStatus());
+
+                // Some items can be null (not present) when you do an unauthenticated call:
+                // Differences in the returns can be observed at https://github.com/justintv/Twitch-API/blob/master/v3_resources/channels.md
+                Log.e(LOG_TAG, channel.getStreamKey()+"");
             }
 
             @Override
