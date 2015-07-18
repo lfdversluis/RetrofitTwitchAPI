@@ -16,7 +16,7 @@ public class TwitchUser {
     @Expose
     private String type;
     @Expose
-    private String  bio;
+    private Object bio;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
@@ -28,6 +28,12 @@ public class TwitchUser {
     @SerializedName("_links")
     @Expose
     private Links Links;
+    @Expose
+    private String email;
+    @Expose
+    private Boolean partnered;
+    @Expose
+    private Notifications notifications;
 
     /**
      * @return The displayName
@@ -88,14 +94,14 @@ public class TwitchUser {
     /**
      * @return The bio
      */
-    public String  getBio() {
+    public Object getBio() {
         return bio;
     }
 
     /**
      * @param bio The bio
      */
-    public void setBio(String  bio) {
+    public void setBio(Object bio) {
         this.bio = bio;
     }
 
@@ -155,7 +161,49 @@ public class TwitchUser {
         this.Links = Links;
     }
 
-    class Links {
+    /**
+     * @return The email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email The email
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * @return The partnered
+     */
+    public Boolean getPartnered() {
+        return partnered;
+    }
+
+    /**
+     * @param partnered The partnered
+     */
+    public void setPartnered(Boolean partnered) {
+        this.partnered = partnered;
+    }
+
+    /**
+     * @return The notifications
+     */
+    public Notifications getNotifications() {
+        return notifications;
+    }
+
+    /**
+     * @param notifications The notifications
+     */
+    public void setNotifications(Notifications notifications) {
+        this.notifications = notifications;
+    }
+
+    public class Links {
 
         @Expose
         private String self;
@@ -174,6 +222,42 @@ public class TwitchUser {
             this.self = self;
         }
 
+    }
+
+    public class Notifications {
+
+        @Expose
+        private Boolean push;
+        @Expose
+        private Boolean email;
+
+        /**
+         * @return The push
+         */
+        public Boolean getPush() {
+            return push;
+        }
+
+        /**
+         * @param push The push
+         */
+        public void setPush(Boolean push) {
+            this.push = push;
+        }
+
+        /**
+         * @return The email
+         */
+        public Boolean getEmail() {
+            return email;
+        }
+
+        /**
+         * @param email The email
+         */
+        public void setEmail(Boolean email) {
+            this.email = email;
+        }
 
     }
 }

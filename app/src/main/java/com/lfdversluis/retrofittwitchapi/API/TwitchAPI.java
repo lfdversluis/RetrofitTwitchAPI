@@ -4,7 +4,10 @@ import com.lfdversluis.retrofittwitchapi.models.TwitchUser;
 
 import retrofit.Callback;
 import retrofit.http.GET;
+import retrofit.http.Header;
+import retrofit.http.Headers;
 import retrofit.http.Path;
+import retrofit.http.Query;
 
 public interface TwitchAPI {
 
@@ -12,9 +15,10 @@ public interface TwitchAPI {
     void getUserByName(
             @Path("user") String user, Callback<TwitchUser> cb);
 
-    @GET("/users/{user}")
-    void getUserByOauthHeader(
-            @Path("user") Callback<TwitchUser> cb);
+    @GET("/user")
+    void getUserByOauthToken(
+            @Query("oauth_token") String token,
+            Callback<TwitchUser> cb);
 
 
 

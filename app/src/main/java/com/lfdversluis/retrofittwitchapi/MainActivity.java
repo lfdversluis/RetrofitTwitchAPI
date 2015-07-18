@@ -10,6 +10,7 @@ import com.lfdversluis.retrofittwitchapi.API.TwitchAPI;
 import com.lfdversluis.retrofittwitchapi.models.TwitchUser;
 
 import retrofit.Callback;
+import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -29,21 +30,29 @@ public class MainActivity extends Activity {
     public void onStart(){
         super.onStart();
 
+        RequestInterceptor requestInterceptor = new RequestInterceptor() {
+            @Override
+            public void intercept(RequestFacade request) {
+                request.addHeader("Accept", "application/vnd.twitchtv.v3+json");
+                request.addHeader("Client-ID", "<Client ID>");
+            }
+        };
+
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint("https://api.twitch.tv/kraken")
+                .setRequestInterceptor(requestInterceptor)
                 .build();
 
         TwitchAPI api = restAdapter.create(TwitchAPI.class);
         api.getUserByName("cookieandegg", new Callback<TwitchUser>() {
             @Override
             public void success(TwitchUser user, Response response) {
-                Log.e(LOG_TAG, user.getLogo());
-
+                Log.e(LOG_TAG, user.getNotifications()+""); // Can be null if queried by getUserByName (not authenticated)!
             }
 
             @Override
             public void failure(RetrofitError error) {
-                // TODO error
+                Log.e(LOG_TAG, "FAILED: " + error.toString());
             }
         });
     }
