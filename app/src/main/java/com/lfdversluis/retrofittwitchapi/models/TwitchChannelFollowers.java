@@ -46,7 +46,7 @@ public class TwitchChannelFollowers {
     }
 
     /**
-     * @return The Links
+     * @return The StreamLink
      */
     public FollowLinks getLinks() {
         return Links;
@@ -88,7 +88,7 @@ public class TwitchChannelFollowers {
         }
 
         /**
-         * @return The Links
+         * @return The StreamLink
          */
         public Links getLinks() {
             return Links;

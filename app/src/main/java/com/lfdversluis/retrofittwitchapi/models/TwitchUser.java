@@ -148,7 +148,7 @@ public class TwitchUser {
     }
 
     /**
-     * @return The Links
+     * @return The StreamLink
      */
     public Links getLinks() {
         return Links;

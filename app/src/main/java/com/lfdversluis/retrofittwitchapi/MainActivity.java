@@ -9,6 +9,9 @@ import android.view.MenuItem;
 import com.lfdversluis.retrofittwitchapi.API.TwitchAPI;
 import com.lfdversluis.retrofittwitchapi.Models.TwitchChannel;
 import com.lfdversluis.retrofittwitchapi.Models.TwitchChannelFollowers;
+import com.lfdversluis.retrofittwitchapi.Models.TwitchChannelVideos;
+import com.lfdversluis.retrofittwitchapi.Models.TwitchFollowedChannels;
+import com.lfdversluis.retrofittwitchapi.Models.TwitchFollowedStreams;
 import com.lfdversluis.retrofittwitchapi.Models.TwitchUser;
 
 import org.json.JSONException;
@@ -118,7 +121,7 @@ public class MainActivity extends Activity {
          * STREAM FOLLOWERS EXAMPLE
          *******************************************************************/
 
-        api.getChannelFollowers("cookieandegg", 25, 0, "desc", new Callback<TwitchChannelFollowers>() {
+        api.getChannelFollowers("cookieandegg", 4, 0, "desc", new Callback<TwitchChannelFollowers>() {
             @Override
             public void success(TwitchChannelFollowers followers, Response response) {
                 Log.e("Channel followers ex.", followers.getTotal()+"");
@@ -130,6 +133,60 @@ public class MainActivity extends Activity {
             @Override
             public void failure(RetrofitError error) {
                 Log.e("Channel followers ex.", error.toString());
+            }
+        });
+
+        /********************************************************************
+         * CHANNEL VIDEOS EXAMPLE
+         *******************************************************************/
+
+        api.getChannelVideos("amazhs", 4, 0, false, false, "all", new Callback<TwitchChannelVideos>() {
+            @Override
+            public void success(TwitchChannelVideos videos, Response response) {
+                for(TwitchChannelVideos.Video video : videos.getVideos()){
+                    Log.e("Channel vid ex.", video.getTitle());
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e("Channel vid ex.", error.toString());
+            }
+        });
+
+        /********************************************************************
+         * FOLLOWED STREAMS EXAMPLE
+         *******************************************************************/
+
+        api.getFollowedStreams("<Oauth token>", 4, 0, new Callback<TwitchFollowedStreams>() {
+            @Override
+            public void success(TwitchFollowedStreams streams, Response response) {
+                for(TwitchFollowedStreams.Stream stream : streams.getStreams()){
+                    Log.e("Followed streams ex.", stream.getChannel().getStatus());
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e("Followed streams ex.", error.toString());
+            }
+        });
+
+        /********************************************************************
+         * FOLLOWED CHANNELS EXAMPLE
+         *******************************************************************/
+
+        api.getFollowedChannels("cookieandegg", 2, 0, "desc", "created_at", new Callback<TwitchFollowedChannels>() {
+            @Override
+            public void success(TwitchFollowedChannels channels, Response response) {
+                for(TwitchFollowedChannels.Follow follow : channels.getFollows()){
+                    Log.e("Followed channel ex.", follow.getChannel().getStatus());
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e("Followed channel ex.", error.toString());
             }
         });
     }
