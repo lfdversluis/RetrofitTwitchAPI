@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.lfdversluis.retrofittwitchapi.API.TwitchAPI;
+import com.lfdversluis.retrofittwitchapi.Models.TwitchBlockedUsers;
 import com.lfdversluis.retrofittwitchapi.Models.TwitchChannel;
 import com.lfdversluis.retrofittwitchapi.Models.TwitchChannelFollowers;
 import com.lfdversluis.retrofittwitchapi.Models.TwitchChannelVideos;
@@ -28,7 +29,7 @@ import retrofit.client.Response;
 public class MainActivity extends Activity {
 
     private final String LOG_TAG = "MainActivity";
-    private final String OauthToken = "";
+    private final String oauthToken = "";
     private final String clientId = "";
 
     @Override
@@ -113,8 +114,7 @@ public class MainActivity extends Activity {
             e.printStackTrace();
         }
 
-
-        api.updateChannel(OauthToken, "cookieandegg", new TypedJSONString(updateObject.toString()), new Callback<TwitchChannel>() {
+        api.updateChannel(oauthToken, "cookieandegg", new TypedJSONString(updateObject.toString()), new Callback<TwitchChannel>() {
             @Override
             public void success(TwitchChannel channel, Response response) {
                 Log.e("Update channel ex.", "Success");
@@ -169,7 +169,7 @@ public class MainActivity extends Activity {
          * FOLLOWED STREAMS EXAMPLE
          *******************************************************************/
 
-        api.getFollowedStreams(OauthToken, 2, 0, new Callback<TwitchFollowedStreams>() {
+        api.getFollowedStreams(oauthToken, 2, 0, new Callback<TwitchFollowedStreams>() {
             @Override
             public void success(TwitchFollowedStreams streams, Response response) {
                 for(TwitchFollowedStreams.Stream stream : streams.getStreams()){
@@ -199,6 +199,24 @@ public class MainActivity extends Activity {
             @Override
             public void failure(RetrofitError error) {
                 Log.e("Followed channel ex.", error.toString());
+            }
+        });
+
+        /********************************************************************
+         * BLOCKED USERS EXAMPLE
+         *******************************************************************/
+
+        api.getBlockedUsers(oauthToken, "cookieandegg", 2, 0, new Callback<TwitchBlockedUsers>() {
+            @Override
+            public void success(TwitchBlockedUsers blocks, Response response) {
+                for(TwitchBlockedUsers.Block blockedUser : blocks.getBlocks()){
+                    Log.e("Blocked users ex.", blockedUser.getUser().getDisplayName());
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e("Blocked users ex.", error.toString());
             }
         });
 

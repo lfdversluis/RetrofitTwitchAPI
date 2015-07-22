@@ -1,5 +1,6 @@
 package com.lfdversluis.retrofittwitchapi.API;
 
+import com.lfdversluis.retrofittwitchapi.Models.TwitchBlockedUsers;
 import com.lfdversluis.retrofittwitchapi.Models.TwitchChannel;
 import com.lfdversluis.retrofittwitchapi.Models.TwitchChannelFollowers;
 import com.lfdversluis.retrofittwitchapi.Models.TwitchChannelVideos;
@@ -87,6 +88,15 @@ public interface TwitchAPI {
             @Query("direction") String direction,
             @Query("sortby") String sortBy,
             Callback<TwitchFollowedChannels> cb
+    );
+
+    @GET("/users/{user}/blocks")
+    void getBlockedUsers(
+            @Query("oauth_token") String OAuthToken,
+            @Path("user") String user,
+            @Query("limit") int limit,
+            @Query("offset") int offset,
+            Callback<TwitchBlockedUsers> cb
     );
 
 }
