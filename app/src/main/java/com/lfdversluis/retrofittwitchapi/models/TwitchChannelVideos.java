@@ -344,7 +344,7 @@ public class TwitchChannelVideos {
         @Expose
         private String game;
         @Expose
-        private Integer length;
+        private Double length;
         @Expose
         private String preview;
         @Expose
@@ -479,14 +479,14 @@ public class TwitchChannelVideos {
         /**
          * @return The length
          */
-        public Integer getLength() {
+        public Double getLength() {
             return length;
         }
 
         /**
          * @param length The length
          */
-        public void setLength(Integer length) {
+        public void setLength(Double length) {
             this.length = length;
         }
 

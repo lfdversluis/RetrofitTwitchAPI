@@ -3,6 +3,7 @@ package com.lfdversluis.retrofittwitchapi.API;
 import com.lfdversluis.retrofittwitchapi.Models.TwitchBlockedUsers;
 import com.lfdversluis.retrofittwitchapi.Models.TwitchChannel;
 import com.lfdversluis.retrofittwitchapi.Models.TwitchChannelFollowers;
+import com.lfdversluis.retrofittwitchapi.Models.TwitchChannelSubscribers;
 import com.lfdversluis.retrofittwitchapi.Models.TwitchChannelVideos;
 import com.lfdversluis.retrofittwitchapi.Models.TwitchFollowedChannels;
 import com.lfdversluis.retrofittwitchapi.Models.TwitchFollowedStreams;
@@ -97,6 +98,17 @@ public interface TwitchAPI {
             @Query("limit") int limit,
             @Query("offset") int offset,
             Callback<TwitchBlockedUsers> cb
+    );
+
+    @GET("/channels/{channel}/subscriptions")
+    void getChannelSubscribers(
+            @Query("oauth_token") String OAuthToken,
+            @Path("channel") String channel,
+            @Query("limit") int limit,
+            @Query("offset") int offset,
+            @Query("direction") String direction,
+            Callback<TwitchChannelSubscribers> cb
+
     );
 
 }
