@@ -13,6 +13,7 @@ import com.lfdversluis.retrofittwitchapi.Models.TwitchChannelVideos;
 import com.lfdversluis.retrofittwitchapi.Models.TwitchFollowedChannels;
 import com.lfdversluis.retrofittwitchapi.Models.TwitchFollowedStreams;
 import com.lfdversluis.retrofittwitchapi.Models.TwitchUser;
+import com.lfdversluis.retrofittwitchapi.Util.TypedJSONString;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +28,8 @@ import retrofit.client.Response;
 public class MainActivity extends Activity {
 
     private final String LOG_TAG = "MainActivity";
+    private final String OauthToken = "";
+    private final String clientId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +45,18 @@ public class MainActivity extends Activity {
             @Override
             public void intercept(RequestFacade request) {
                 request.addHeader("Accept", "application/vnd.twitchtv.v3+json");
-                request.addHeader("Client-ID", "<Client ID>");
+                request.addHeader("Client-ID", clientId);
             }
         };
 
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint("https://api.twitch.tv/kraken")
                 .setRequestInterceptor(requestInterceptor)
+               /* .setLogLevel(RestAdapter.LogLevel.FULL).setLog(new RestAdapter.Log() {
+                    public void log(String msg) {
+                        Log.i("retrofit", msg);
+                    }
+                }) */
                 .build();
 
         TwitchAPI api = restAdapter.create(TwitchAPI.class);
@@ -70,6 +78,7 @@ public class MainActivity extends Activity {
                 Log.e("getUserByName ex.", "FAILED: " + error.toString());
             }
         });
+
 
         /********************************************************************
          * TWITCH CHANNEL EXAMPLE
@@ -104,8 +113,8 @@ public class MainActivity extends Activity {
             e.printStackTrace();
         }
 
-        /*
-        api.updateChannel("<OAuth token>", "cookieandegg", new TypedJSONString(channelObject.toString()), new Callback<TwitchChannel>() {
+
+        api.updateChannel(OauthToken, "cookieandegg", new TypedJSONString(updateObject.toString()), new Callback<TwitchChannel>() {
             @Override
             public void success(TwitchChannel channel, Response response) {
                 Log.e("Update channel ex.", "Success");
@@ -115,13 +124,13 @@ public class MainActivity extends Activity {
             public void failure(RetrofitError error) {
                 Log.e("Update channel ex.", "FAILED: " + error.toString());
             }
-        }); */
+        });
 
         /********************************************************************
          * STREAM FOLLOWERS EXAMPLE
          *******************************************************************/
 
-        api.getChannelFollowers("cookieandegg", 4, 0, "desc", new Callback<TwitchChannelFollowers>() {
+        api.getChannelFollowers("cookieandegg", 2, 0, "desc", new Callback<TwitchChannelFollowers>() {
             @Override
             public void success(TwitchChannelFollowers followers, Response response) {
                 Log.e("Channel followers ex.", followers.getTotal()+"");
@@ -136,11 +145,12 @@ public class MainActivity extends Activity {
             }
         });
 
+
         /********************************************************************
          * CHANNEL VIDEOS EXAMPLE
          *******************************************************************/
 
-        api.getChannelVideos("amazhs", 4, 0, false, false, "all", new Callback<TwitchChannelVideos>() {
+        api.getChannelVideos("amazhs", 2, 0, false, false, "all", new Callback<TwitchChannelVideos>() {
             @Override
             public void success(TwitchChannelVideos videos, Response response) {
                 for(TwitchChannelVideos.Video video : videos.getVideos()){
@@ -154,11 +164,12 @@ public class MainActivity extends Activity {
             }
         });
 
+
         /********************************************************************
          * FOLLOWED STREAMS EXAMPLE
          *******************************************************************/
 
-        api.getFollowedStreams("<Oauth token>", 4, 0, new Callback<TwitchFollowedStreams>() {
+        api.getFollowedStreams(OauthToken, 2, 0, new Callback<TwitchFollowedStreams>() {
             @Override
             public void success(TwitchFollowedStreams streams, Response response) {
                 for(TwitchFollowedStreams.Stream stream : streams.getStreams()){
@@ -171,6 +182,7 @@ public class MainActivity extends Activity {
                 Log.e("Followed streams ex.", error.toString());
             }
         });
+
 
         /********************************************************************
          * FOLLOWED CHANNELS EXAMPLE
@@ -189,6 +201,7 @@ public class MainActivity extends Activity {
                 Log.e("Followed channel ex.", error.toString());
             }
         });
+
     }
 
     @Override

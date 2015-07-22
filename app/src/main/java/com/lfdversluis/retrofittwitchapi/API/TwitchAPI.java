@@ -7,7 +7,6 @@ import com.lfdversluis.retrofittwitchapi.Models.TwitchFollowedChannels;
 import com.lfdversluis.retrofittwitchapi.Models.TwitchFollowedStreams;
 import com.lfdversluis.retrofittwitchapi.Models.TwitchUser;
 import com.lfdversluis.retrofittwitchapi.Util.TypedJSONString;
-import com.squareup.okhttp.Call;
 
 import retrofit.Callback;
 import retrofit.http.Body;
